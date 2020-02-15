@@ -424,19 +424,13 @@ void SWAP_L(GB_CPU* cpu) { SWAP(cpu->L); }
 void SWAP_P(GB_CPU* cpu) { DEFERHL(SWAP); }
 
 void DAA(GB_CPU* cpu) { /* DAA--进行BCD运算后的调整 */
-	GB_BYTE correction = 0;
 	if (!FLAG_SUBS(cpu)) {
-		if (FLAG_HACA(cpu) || (cpu->A & 0xF) > 0x9) correction += 0x6;
-		if (FLAG_CARR(cpu) || (cpu->A & 0xFF) > 0x90) {
-			correction += 0x60;
-			SET_FLAG_CARR(cpu);
-		}
+		if (FLAG_CARR(cpu) || cpu->A > 0x99) { cpu->A += 0x60; SET_FLAG_CARR(cpu); }
+		if (FLAG_HACA(cpu) || (cpu->A & 0xF) > 0x9) { cpu->A += 0x6; }
 	} else {
-		if (FLAG_HACA(cpu)) correction += 0xFA;
-		if (FLAG_CARR(cpu)) correction += 0xA0;
+		if (FLAG_CARR(cpu)) { cpu->A -= 0x60; }
+		if (FLAG_HACA(cpu)) { cpu->A -= 0x6; }
 	}
-
-	cpu->A += correction;
 	if (cpu->A == 0) SET_FLAG_ZERO(cpu); else RST_FLAG_ZERO(cpu);
 	RST_FLAG_HACA(cpu);
 }
