@@ -1,31 +1,32 @@
 #pragma once
 #include <SDL.h>
+#include "GB_common.h"
 
 typedef struct GB_SOUND {
 	struct GB_GAMEBOY* parent;
-	SDL_AudioSpec spec; // freq≤…—˘¬ : √ø√Î÷”∂‡…Ÿ¥Œ≤…—˘
+	SDL_AudioSpec spec; // freqÈááÊ†∑Áéá: ÊØèÁßíÈíüÂ§öÂ∞ëÊ¨°ÈááÊ†∑
 	Uint8* playBuf;
 
-	struct { // Sound 1 ±‰∆µ∑Ω≤®
+	struct { // Sound 1 ÂèòÈ¢ëÊñπÊ≥¢
 		GB_BYTE swpPeriod, swpDir, swpNum, __swpCnt;  // 0xFF10 NR10 -PPP NSSS Sweep period, negate, shift
 		GB_BYTE duty, lenCnt, _enable, __dutyStep;                 // 0xFF11 NR11 DDLL LLLL Duty, Length load (64-L)/256
 		GB_BYTE envInit, envDir, envPeriod, __envCnt, __vol;       // 0xFF12 NR12 VVVV APPP Starting volume, Envelope add mode, period
 		GB_WORD freq, __freq;		                               // 0xFF13 NR13 FFFF FFFF Frequency
 		GB_BYTE lenCntEn;					                       // 0xFF14 NR14 TL-- -FFF Trigger, Length enable, Frequency MSB
 		
-		int __freqTimer; // (2048 - sound->sqr1.freq) ∏ˆ÷‹∆⁄“ª∏ˆ–≈∫≈
+		int __freqTimer; // (2048 - sound->sqr1.freq) ‰∏™Âë®Êúü‰∏Ä‰∏™‰ø°Âè∑
 	} sqr1;
 
-	struct { // Sound 2 ∂®∆µ∑Ω≤®
+	struct { // Sound 2 ÂÆöÈ¢ëÊñπÊ≥¢
 		GB_BYTE duty, lenCnt, _enable, __dutyStep;                 // 0xFF16 NR21 DDLL LLLL Duty, Length load(64 - L)
 		GB_BYTE envInit, envDir, envPeriod, __envCnt, __vol;       // 0xFF17 NR22 VVVV APPP Starting volume, Envelope add mode, period
 		GB_WORD freq;                                              // 0xFF18 NR23 FFFF FFFF Frequency LSB
 		GB_BYTE lenCntEn;					                   	   // 0xFF19 NR24 TL-- - FFF Trigger, Length enable, Frequency MSB
 		
-		int __freqTimer; // (2048 - sound->sqr1.freq) ∏ˆ÷‹∆⁄“ª∏ˆ–≈∫≈
+		int __freqTimer; // (2048 - sound->sqr1.freq) ‰∏™Âë®Êúü‰∏Ä‰∏™‰ø°Âè∑
 	} sqr2;
 
-	struct { // Sound 3 ≤®±Ì
+	struct { // Sound 3 Ê≥¢Ë°®
 		GB_BYTE output;	          // 0xFF1A NR30 E--- ----DAC power
 		GB_WORD lenCnt;           // 0xFF1B NR31 LLLL LLLL Length load(256 - L)
 		GB_BYTE _enable;
@@ -35,11 +36,11 @@ typedef struct GB_SOUND {
 		
 		int __freqTimer;
 		
-		GB_BYTE pattern[0x20]; // 0xFF30-0xFF40 ≤®±Ì
+		GB_BYTE pattern[0x20]; // 0xFF30-0xFF40 Ê≥¢Ë°®
 		GB_BYTE __samplePos;
 	} wave;
 
-	struct { // Sound 4 ‘Î…˘
+	struct { // Sound 4 Âô™Â£∞
 		GB_BYTE lenCnt, _enable;                              // 0xFF20 NR41 --LL LLLL Length load(64 - L)
 		GB_BYTE envInit, envDir, envPeriod, __envCnt, __vol;  // 0xFF21 NR42 VVVV APPP Starting volume, Envelope add mode, period
 		GB_BYTE freqShift, freqWidth, freqRatio;              // 0xFF22 NR43 SSSS WDDD Clock shift, Width mode of LFSR, Divisor code
@@ -56,7 +57,7 @@ typedef struct GB_SOUND {
 		GB_BYTE ch2Left, ch2Right; // 0xFF25 NR51
 		GB_BYTE ch3Left, ch3Right; // 0xFF25 NR51
 		GB_BYTE ch4Left, ch4Right; // 0xFF25 NR51
-		GB_BYTE switchAll;	// 0xFF26 NR52  bit7 ◊‹ø™πÿ, bit 0-3 lenFlag
+		GB_BYTE switchAll;	// 0xFF26 NR52  bit7 ÊÄªÂºÄÂÖ≥, bit 0-3 lenFlag
 	} ctrl;
 } GB_SOUND;
 

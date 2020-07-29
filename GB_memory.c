@@ -56,7 +56,7 @@ int readCartHeader(FILE * fp, GB_CARTHEADER *header) {
 		return -1;
 	}
 	
-	header->romSize = 0x8000 << (buffer[0x48] & 0xF); // µ¥Î»: BYTE
+	header->romSize = 0x8000 << (buffer[0x48] & 0xF); // å•ä½: BYTE
 	header->romSize += ((buffer[0x48] >> 4) ? (0x8000 << (buffer[0x48] >> 4)) : 0);
 
 	switch (buffer[0x49]) // RAM Size
@@ -125,9 +125,9 @@ int timer_step(GB_MEMORY* mem, int cycles) {
 		int timer = mem->__clocks, last = mem->__clocks;
 		int bitMask = ((mem->tac & 0b11) ? (0b10 << ((mem->tac & 0b11) << 1)) : 0b1000000000);
 
-		for (int i = 4 * cycles; i > 0; i--) { // Öð¸öÅÐ¶Ïclocks
+		for (int i = 4 * cycles; i > 0; i--) { // é€ä¸ªåˆ¤æ–­clocks
 			timer++;
-			if ((last & bitMask) && !(timer & bitMask)) {  // ¼ì²âÏÂ½µÑØ¸öÊý
+			if ((last & bitMask) && !(timer & bitMask)) {  // æ£€æµ‹ä¸‹é™æ²¿ä¸ªæ•°
 				mem->tima++;
 				if (mem->tima == 0) {
 					//i -= 4;
@@ -240,9 +240,9 @@ void writeByte(GB_MEMORY* mem, GB_WORD addr, GB_BYTE val) {
 		//....many I/O registers....
 		else if (addr == 0xFF04) { // 0xFF04 Divider
 			int bitMask = ((mem->tac & 0b11) ? (0b10 << ((mem->tac & 0b11) << 1)) : 0b1000000000);
-			if (mem->__clocks & bitMask) {  // Ô­À´ÊÇ1, ÏÖÔÚ±ä0, ²úÉúÒ»¸öÏÂ½µÑØ
+			if (mem->__clocks & bitMask) {  // åŽŸæ¥æ˜¯1, çŽ°åœ¨å˜0, äº§ç”Ÿä¸€ä¸ªä¸‹é™æ²¿
 				mem->tima++;
-				if (mem->tima == 0) { // Òç³öµÄÏÂÒ»¸öÖÜÆÚ²Å»áload, ´Ë´¦ºöÂÔ
+				if (mem->tima == 0) { // æº¢å‡ºçš„ä¸‹ä¸€ä¸ªå‘¨æœŸæ‰ä¼šload, æ­¤å¤„å¿½ç•¥
 					mem->tima = mem->tma;
 					mem->intFlag |= 0b00000100;
 				}

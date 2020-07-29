@@ -2,10 +2,10 @@
 
 static GB_BYTE mode = 0;
  /*
-	 0: ROM ģʽ 128 ROM-Bank(16KB) + 1 ERAM-Bank(8KB)
-	 1: RAM ģʽ 32 ROM-Bank + 4 ERAM-Bank 
+	 0: ROM 模式 128 ROM-Bank(16KB) + 1 ERAM-Bank(8KB)
+	 1: RAM 模式 32 ROM-Bank + 4 ERAM-Bank 
   */
-static GB_BYTE switchEram = 1;  // 0x0000-0x2000 ��չram����(W)
+static GB_BYTE switchEram = 1;  // 0x0000-0x2000 拓展ram开关(W)
 static GB_BYTE romBank = 1;   // 0x2000-0x4000 Switch between 1-31 (value 0 is seen as 1)
 static GB_BYTE ramBank = 0;  // 0x4000-0x6000 Switch between 0-3
 

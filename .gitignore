@@ -1,10 +1,9 @@
-/cartridges
 .vscode
 .vs
 /Debug
-/x64
 /Release
-/gb-test-roms-master
-/dist
-/reference
-/SDL2.dll
+/x64
+
+/ignore
+*.o
+gameboy

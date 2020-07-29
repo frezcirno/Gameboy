@@ -2,7 +2,7 @@
 #include <time.h>
 
 static GB_BYTE romBank = 1;   // 0x2000-0x4000 Switch between 1-127
-static GB_BYTE switchEram = 1;  // 0x0000-0x2000 Eram/RTC¿ª¹Ø(W)
+static GB_BYTE switchEram = 1;  // 0x0000-0x2000 Eram/RTCå¼€å…³(W)
 static GB_BYTE mode = 0; // 0x4000-0x6000 Switch between 0-3
 static GB_BYTE rtc;
 /*

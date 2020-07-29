@@ -150,13 +150,13 @@ int cpu_step(GB_CPU* cpu) {
 	else {
 		GB_BYTE op = readByte(cpu->parent->mem, cpu->PC++);
 		cpu->insnCycles = insnClock[op];
-		insnMap[op](cpu); // ¿ÉÄÜÐÞ¸ÄinsnT
+		insnMap[op](cpu); // å¯èƒ½ä¿®æ”¹insnT
 	}
 	return cpu->insnCycles;
 }
 
 GB_BYTE checkInt(GB_CPU* cpu) {
-	GB_BYTE intNo = cpu->parent->mem->intEnMask & cpu->parent->mem->intFlag; // ÓÐÖÐ¶Ï && ´ËÖÐ¶ÏÎ´¹Ø±Õ
+	GB_BYTE intNo = cpu->parent->mem->intEnMask & cpu->parent->mem->intFlag; // æœ‰ä¸­æ–­ && æ­¤ä¸­æ–­æœªå…³é—­
 	if (intNo) {
 		if (intNo & 1) return 1;
 		else if (intNo & 2) return 2;

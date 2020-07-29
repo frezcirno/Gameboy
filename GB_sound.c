@@ -17,12 +17,12 @@ int sound_init(GB_SOUND* sound)
     }
 
     memset(&sound->spec, 0, sizeof(sound->spec));
-    sound->spec.freq = 48000; // Ò»ÃëÖÓ 48000 ´Î²ÉÑù
-    sound->spec.format = AUDIO_U8; // Ã¿¸ö²ÉÑùÊý¾ÝÕ¼ 1 ¸ö×Ö½Ú
-    sound->spec.channels = 2; // ×óÓÒÉùµÀ (Ã¿´Î²ÉÑùÁ½¸öÊý¾Ý)
-    sound->spec.samples = 1000; // ÒôÆµ»º³åÇø´óÐ¡ (µ¥Î»: ²ÉÑù´ÎÊý) // Ó°ÏìÒôÆµÌî³äÍê±ÏºóµÄµÈ´ýÊ±¼ä
+    sound->spec.freq = 48000; // ä¸€ç§’é’Ÿ 48000 æ¬¡é‡‡æ ·
+    sound->spec.format = AUDIO_U8; // æ¯ä¸ªé‡‡æ ·æ•°æ®å  1 ä¸ªå­—èŠ‚
+    sound->spec.channels = 2; // å·¦å³å£°é“ (æ¯æ¬¡é‡‡æ ·ä¸¤ä¸ªæ•°æ®)
+    sound->spec.samples = 1000; // éŸ³é¢‘ç¼“å†²åŒºå¤§å° (å•ä½: é‡‡æ ·æ¬¡æ•°) // å½±å“éŸ³é¢‘å¡«å……å®Œæ¯•åŽçš„ç­‰å¾…æ—¶é—´
 
-    if (SDL_OpenAudio(&sound->spec, NULL) < 0) { //´ò¿ªid==1µÄÒôÆµÉè±¸
+    if (SDL_OpenAudio(&sound->spec, NULL) < 0) { //æ‰“å¼€id==1çš„éŸ³é¢‘è®¾å¤‡
         SDL_Log("Failed to open audio: %s", SDL_GetError());
         return -1;
     }
@@ -45,7 +45,7 @@ void sound_free(GB_SOUND* sound)
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
 
-int sound_step(GB_SOUND* sound, int cycles)   // Æ½¾ùÃ¿ 1-6 T µ÷ÓÃÒ»´Î, 1T = 1 / 1, 048, 576s
+int sound_step(GB_SOUND* sound, int cycles)   // å¹³å‡æ¯ 1-6 T è°ƒç”¨ä¸€æ¬¡, 1T = 1 / 1, 048, 576s
 {
     static const short clockpattern256[8] = {1, 0, 1, 0, 1, 0, 1, 0};
     static const short clockpattern128[8] = {0, 0, 1, 0, 0, 0, 1, 0};
@@ -54,7 +54,7 @@ int sound_step(GB_SOUND* sound, int cycles)   // Æ½¾ùÃ¿ 1-6 T µ÷ÓÃÒ»´Î, 1T = 1 /
 	static long long cntPushSound = 0, cntPushSoundPeriod = 375 * 1048576 / 48000, cntPushSoundPeriodFix = 0;
 	int clk256Hz = 0, clk128Hz = 0, clk64Hz = 0;
 
-	/* 512Hz Ê±ÖÓ */
+	/* 512Hz æ—¶é’Ÿ */
     frameTimer -= cycles;
     if (frameTimer <= 0) {
         frameTimer += GB_CPU_FREQ / 512;
@@ -64,42 +64,42 @@ int sound_step(GB_SOUND* sound, int cycles)   // Æ½¾ùÃ¿ 1-6 T µ÷ÓÃÒ»´Î, 1T = 1 /
         clk64Hz = clockpattern64[frameTimerPhase];
     }
 
-	/* Channel 1 Ê±ÖÓ */
+	/* Channel 1 æ—¶é’Ÿ */
 	sound->sqr1.__freqTimer -= cycles;
 	if (sound->sqr1.__freqTimer <= 0) { // duty 1
 		sound->sqr1.__freqTimer += (2048 - sound->sqr1.freq) / 4;
 		sound->sqr1.__dutyStep = (sound->sqr1.__dutyStep + 1) & 7;
 	}
 
-	/* Channel 2 Ê±ÖÓ */
+	/* Channel 2 æ—¶é’Ÿ */
 	sound->sqr2.__freqTimer -= cycles;
 	if (sound->sqr2.__freqTimer <= 0) { // duty 2
 		sound->sqr2.__freqTimer += (2048 - sound->sqr2.freq) / 4;
 		sound->sqr2.__dutyStep = (sound->sqr2.__dutyStep + 1) & 7;
 	}
 
-	/* Channel 3 Ê±ÖÓ */
+	/* Channel 3 æ—¶é’Ÿ */
 	sound->wave.__freqTimer -= cycles;
 	if (sound->wave.__freqTimer < 0) { // sample pos 3
 		sound->wave.__freqTimer += (2048 - sound->wave.freq) / 2;
 		sound->wave.__samplePos = (sound->wave.__samplePos + 1) & 31;
 	}
 
-	/* Channel 4 Ê±ÖÓ */
+	/* Channel 4 æ—¶é’Ÿ */
 	sound->noise.__freqTimer -= cycles;
 	if (sound->noise.__freqTimer < 0) { // sample pos 3
 		sound->noise.__freqTimer += (2048 - sound->noise.freq) / 4;
 	}
 
     if (clk128Hz) { // Update Freq Sweep (128 Hz)
-        if (sound->sqr1._enable && sound->sqr1.swpPeriod && sound->sqr1.swpNum) { // swpNum == 0 Ê± ÆµÂÊÒ²²»»á¸üÐÂ
+        if (sound->sqr1._enable && sound->sqr1.swpPeriod && sound->sqr1.swpNum) { // swpNum == 0 æ—¶ é¢‘çŽ‡ä¹Ÿä¸ä¼šæ›´æ–°
             sound->sqr1.__swpCnt--;
             if (sound->sqr1.__swpCnt == 0) {
                 sound->sqr1.__swpCnt = sound->sqr1.swpPeriod;
-                // Sweep ÆµÂÊ¸üÐÂ (1-7)/128 Hz
+                // Sweep é¢‘çŽ‡æ›´æ–° (1-7)/128 Hz
                 /*if (nextFreq > 2047) { sound->sqr1.__swpFlag = 0; } else */
-                // restart´¦µÄ¼ì²âºÍ¶þ´Î¼ì²âÒÑ¾­±£Ö¤´Ë´¦Ò»¶¨²»»áÒç³ö
-                // OK AND ±ä»¯ÏµÊý²»ÎªÁã, Ð´Èë
+                // restartå¤„çš„æ£€æµ‹å’ŒäºŒæ¬¡æ£€æµ‹å·²ç»ä¿è¯æ­¤å¤„ä¸€å®šä¸ä¼šæº¢å‡º
+                // OK AND å˜åŒ–ç³»æ•°ä¸ä¸ºé›¶, å†™å…¥
                 GB_WORD nextFreq = (sound->sqr1.swpDir ?
                                     sound->sqr1.__freq - (sound->sqr1.__freq >> sound->sqr1.swpNum) :
                                     sound->sqr1.__freq + (sound->sqr1.__freq >> sound->sqr1.swpNum));
@@ -110,7 +110,7 @@ int sound_step(GB_SOUND* sound, int cycles)   // Æ½¾ùÃ¿ 1-6 T µ÷ÓÃÒ»´Î, 1T = 1 /
                 } else {
                     sound->sqr1._enable = 0;
                 }
-                sound->sqr1.swpNum--; // ¼õµ½Áã¾ÍÍ£Ö¹
+                sound->sqr1.swpNum--; // å‡åˆ°é›¶å°±åœæ­¢
             }
         }
     }
@@ -217,7 +217,7 @@ int genSample1(GB_SOUND* sound) {
 		sig2 = sqrWave[sound->sqr2.duty][sound->sqr2.__dutyStep] * sound->sqr2.__vol;
 	}
 	if (ch3 && sound->wave.output && sound->wave._enable && sound->wave.volLevel && sound->wave.freq <= 2041) {
-		GB_BYTE vol = 0b100 >> (sound->wave.volLevel - 1); // wave.volLevel: 0¾²Òô, 1-3ÓÒÒÆx-1Î»
+		GB_BYTE vol = 0b100 >> (sound->wave.volLevel - 1); // wave.volLevel: 0é™éŸ³, 1-3å³ç§»x-1ä½
 		sig3 = vol * sound->wave.pattern[sound->wave.__samplePos];
 	}
 	if (ch4 && sound->noise._enable && sound->noise.__vol) {
@@ -377,11 +377,11 @@ void sound_writeByte(GB_SOUND* sound, GB_WORD addr, GB_BYTE val)
         sound->sqr1.freq = ((val & 0x3) << 8) | (sound->sqr1.freq & 0xFF);
         if (val & 0x80){
 			sound->sqr1.__freqTimer = (2048 - sound->sqr1.freq) / 4;
-            //sweep ³õÊ¼»¯
+            //sweep åˆå§‹åŒ–
             sound->sqr1.__freq = sound->sqr1.freq;
             sound->sqr1.__swpCnt = sound->sqr1.swpPeriod;
             /*
-            if (sound->sqr1.__swpFlag && sound->sqr1.swpNum) { // ±ä»¯ÏµÊý·ÇÁã, Á¢¼´Ö´ÐÐÒ»´ÎÆµÂÊ¸üÐÂÒç³ö¼ì²â (Èôch1ÒÑ½ûÓÃ,¼ì²âÎÞÒâÒå)
+            if (sound->sqr1.__swpFlag && sound->sqr1.swpNum) { // å˜åŒ–ç³»æ•°éžé›¶, ç«‹å³æ‰§è¡Œä¸€æ¬¡é¢‘çŽ‡æ›´æ–°æº¢å‡ºæ£€æµ‹ (è‹¥ch1å·²ç¦ç”¨,æ£€æµ‹æ— æ„ä¹‰)
                 GB_WORD newFreq = (sound->sqr1.swpDir ?
                                    sound->sqr1.__freq - (sound->sqr1.__freq >> sound->sqr1.swpNum) :
                                    sound->sqr1.__freq + (sound->sqr1.__freq >> sound->sqr1.swpNum));
@@ -390,9 +390,9 @@ void sound_writeByte(GB_SOUND* sound, GB_WORD addr, GB_BYTE val)
                 }
             }*/
 
-            // Length Counter ³õÊ¼»¯
+            // Length Counter åˆå§‹åŒ–
             if (sound->sqr1.lenCnt == 0) sound->sqr1.lenCnt = 64; // reset
-            // Envelope ³õÊ¼»¯
+            // Envelope åˆå§‹åŒ–
             sound->sqr1.__envCnt = sound->sqr1.envPeriod;
             sound->sqr1.__vol = sound->sqr1.envInit;
             // DAC power
@@ -418,10 +418,10 @@ void sound_writeByte(GB_SOUND* sound, GB_WORD addr, GB_BYTE val)
         sound->sqr2.lenCntEn = (val & 0x40 ? 1 : 0);
         sound->sqr2.freq = ((val & 0x3) << 8) | (sound->sqr2.freq & 0xFF);
         if (val & 0x80){
-            // Length Counter ³õÊ¼»¯
+            // Length Counter åˆå§‹åŒ–
             if (sound->sqr2.lenCnt == 0) sound->sqr2.lenCnt = 64;
 
-            // Envelope ³õÊ¼»¯
+            // Envelope åˆå§‹åŒ–
             sound->sqr2.__envCnt = sound->sqr2.envPeriod;
             sound->sqr2.__vol = sound->sqr2.envInit;
 
@@ -450,11 +450,11 @@ void sound_writeByte(GB_SOUND* sound, GB_WORD addr, GB_BYTE val)
         sound->wave.lenCntEn = (val & 0x40 ? 1 : 0);
 		sound->wave.freq = (((val << 8) & 0x30) | (sound->wave.freq & 0xF));
         if (val & 0x80){
-            // Length Counter ³õÊ¼»¯
+            // Length Counter åˆå§‹åŒ–
             if (sound->wave.lenCnt == 0) sound->wave.lenCnt = 256;
             // DAC
             if (sound->wave.output) sound->wave._enable = 1;
-            // CurPos ³õÊ¼»¯
+            // CurPos åˆå§‹åŒ–
 			sound->wave.__samplePos = 0;
 			sound->wave.__freqTimer = (2048 - sound->wave.freq) / 2;
         }
@@ -481,9 +481,9 @@ void sound_writeByte(GB_SOUND* sound, GB_WORD addr, GB_BYTE val)
     case 0xFF23:
         sound->noise.lenCntEn = (val & 0x40 ? 1 : 0);
         if (val & 0x80){
-            // Length Counter ³õÊ¼»¯
+            // Length Counter åˆå§‹åŒ–
             if (sound->noise.lenCnt == 0) sound->noise.lenCnt = 64;
-            // Envelope ³õÊ¼»¯
+            // Envelope åˆå§‹åŒ–
             sound->noise.__envCnt = sound->noise.envPeriod; // 0-15
             sound->noise.__vol = sound->noise.envInit;
             // DAC

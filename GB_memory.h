@@ -26,7 +26,7 @@ typedef struct GB_MEMORY
 	struct GB_GAMEBOY* parent;
 	int inBios;
 	GB_CARTHEADER cartHeader;
-	GB_BYTE cartType;  // 0x0147 ¿¨´øÀàÐÍ
+	GB_BYTE cartType;  // 0x0147 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	const GB_BYTE* rom;
 	GB_BYTE* eram;
@@ -42,17 +42,17 @@ typedef struct GB_MEMORY
 
 	/* I/O Registers */
 	GB_BYTE joypadIn; // 0xFF00 bit 4 & bit 5 (Power +) È¡Öµ {0, 1}
-	GB_BYTE joypadOut[2];	// 0xFF00 bit 0-3 (Power -) µÍËÄÎ»ÓÐÐ§
+	GB_BYTE joypadOut[2];	// 0xFF00 bit 0-3 (Power -) ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Ð§
 
-	GB_WORD __clocks;  // ¸ß8Î»ÊÇdivider
-	//GB_BYTE divider;   // 0xFF04 ¶¨Æµ(16,384Hz)Ê±ÖÓ ·¶Î§0-255
-	GB_BYTE tima;   // 0xFF05 ¿Éµ÷Æµ¿Éµ÷ÆðµãÊ±ÖÓ ·¶Î§modulo-255 Òç³öÊ±»á²úÉú0x50ºÅÖÐ¶Ï
-	GB_BYTE tma;    // 0xFF06 counterÊ±ÖÓµÄÆðµã
-	GB_BYTE tac;   // 0xFF07 counterÊ±ÖÓÉèÖÃ, µÚ0-1Î»¿ØÖÆËÙ¶È, µÚ2Î»¿ØÖÆ¿ª¹Ø
+	GB_WORD __clocks;  // ï¿½ï¿½8Î»ï¿½ï¿½divider
+	//GB_BYTE divider;   // 0xFF04 ï¿½ï¿½Æµ(16,384Hz)Ê±ï¿½ï¿½ ï¿½ï¿½Î§0-255
+	GB_BYTE tima;   // 0xFF05 ï¿½Éµï¿½Æµï¿½Éµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½Î§modulo-255 ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½0x50ï¿½ï¿½ï¿½Ð¶ï¿½
+	GB_BYTE tma;    // 0xFF06 counterÊ±ï¿½Óµï¿½ï¿½ï¿½ï¿½
+	GB_BYTE tac;   // 0xFF07 counterÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½0-1Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½, ï¿½ï¿½2Î»ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½
 	/*
-		Ê±ÖÓÖÜÆÚ(1 clk): 4,194,304Hz
-		»úÆ÷ÖÜÆÚ(4 clk): 1,048,576Hz <- insnCycles
-		CPUÄÚ²¿Ê±ÖÓ(16 clk): 262,144Hz
+		Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(1 clk): 4,194,304Hz
+		ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(4 clk): 1,048,576Hz <- insnCycles
+		CPUï¿½Ú²ï¿½Ê±ï¿½ï¿½(16 clk): 262,144Hz
 		Divider(256 clk): 16,384Hz
 		Counter: 00(1024clk): 4,096Hz
 				 01(16clk): 262,144Hz
@@ -60,12 +60,12 @@ typedef struct GB_MEMORY
 				 03(256clk): 16,384Hz
 	*/
 
-	GB_BYTE intFlag; // 0xFF0F ÖÐ¶Ï bit 0: VBlank; bit 1: LCDC; bit 2: TIMER
+	GB_BYTE intFlag; // 0xFF0F ï¿½Ð¶ï¿½ bit 0: VBlank; bit 1: LCDC; bit 2: TIMER
 	/*
 		Bit 4: Transition from High to Low of Pin number P10-P13.
 		Bit 3: Serial I/O transfer complete
 	*/
-	GB_BYTE intEnMask; // 0xFFFF ÖÐ¶Ï¿ª¹Ø bit 0: VBlank; bit 1: LCDC; bit 2: TIMER
+	GB_BYTE intEnMask; // 0xFFFF ï¿½Ð¶Ï¿ï¿½ï¿½ï¿½ bit 0: VBlank; bit 1: LCDC; bit 2: TIMER
 
 } GB_MEMORY;
 

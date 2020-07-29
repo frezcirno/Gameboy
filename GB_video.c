@@ -5,7 +5,7 @@
 #include <SDL.h>
 
 SDL_Rect srcRect = { 0,0,160,144 };
-GB_COLOR palette[4]; // ÓÉÇ³ÖÁÉîËÄÖÖÑÕÉ«
+GB_COLOR palette[4]; // ç”±æµ…è‡³æ·±å››ç§é¢œè‰²
 
 int video_init(GB_VIDEO* gpu) {
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
@@ -84,99 +84,99 @@ int video_renderLine(GB_VIDEO* gpu) {
 	SDL_Surface* surface = gpu->surface;
 	GB_COLOR* canvas = surface->pixels;
 	if (gpu->switchAll) {
-		if (gpu->switchBg) { // »æÖÆ±³¾°
-			/* tile map: 32 x 32 x 1 ×Ö½Ú */
+		if (gpu->switchBg) { // ç»˜åˆ¶èƒŒæ™¯
+			/* tile map: 32 x 32 x 1 å­—èŠ‚ */
 			int mapStart = (gpu->bgMap ? 0x1C00 : 0x1800);// VRAM offset for the tile map
-			int mapY = ((gpu->line + gpu->scy) & 0xFF) >> 3; // Which line of tiles to use in the map, 8 ĞĞÏñËØ¶ÔÓ¦ 1 ĞĞtile
-			int mapX = (gpu->scx & 0xFF) >> 3; // Which tile to start with in the map line, 8 ÁĞÏñËØ¶ÔÓ¦ 1 ÁĞtile
+			int mapY = ((gpu->line + gpu->scy) & 0xFF) >> 3; // Which line of tiles to use in the map, 8 è¡Œåƒç´ å¯¹åº” 1 è¡Œtile
+			int mapX = (gpu->scx & 0xFF) >> 3; // Which tile to start with in the map line, 8 åˆ—åƒç´ å¯¹åº” 1 åˆ—tile
 			int tileNo = gpu->vram[mapStart + 32 * mapY + mapX];// Read tile index from the background map
-			if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 0x100;// tile set #0 ĞŞÕıË÷Òı
+			if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 0x100;// tile set #0 ä¿®æ­£ç´¢å¼•
 
-			/* tile ÄÚ²¿×ø±ê */
+			/* tile å†…éƒ¨åæ ‡ */
 			int tileY = (gpu->line + gpu->scy) & 0b111;// Which line of pixels to use in the tiles
 			int tileX = gpu->scx & 0b111;// Where in the tileline to start
 
 			int canvasOffset = gpu->line * 160; // Where to render on the canvas
 			for (int i = 0; i < 160; i++)
 			{
-				// »æÖÆÒ»¸öµã
-				// SDL: 8bit: pixelsÄÚ²¿´æ´¢surface->pixelFormat->paletteÄÚ²¿Ë÷Òı
-				//     >8bit: pixelsÄÚ²¿´æ´¢ÑÕÉ«RGB
+				// ç»˜åˆ¶ä¸€ä¸ªç‚¹
+				// SDL: 8bit: pixelså†…éƒ¨å­˜å‚¨surface->pixelFormat->paletteå†…éƒ¨ç´¢å¼•
+				//     >8bit: pixelså†…éƒ¨å­˜å‚¨é¢œè‰²RGB
 				int colorNo = gpu->tileData[tileNo][tileY][tileX];/*0-3*/
 				canvas[canvasOffset + i] = gpu->bgPal[colorNo]; // 0x17000
 				tileX++;
-				if (tileX == 8)// Ë®Æ½ÇĞ»»µ½ÏÂÒ»¸ötile
+				if (tileX == 8)// æ°´å¹³åˆ‡æ¢åˆ°ä¸‹ä¸€ä¸ªtile
 				{
 					tileX = 0;
-					mapX = (mapX + 1) & 31; // µ½±ß½çÕÛ»Ø, Î»ÔËËã¿ì
+					mapX = (mapX + 1) & 31; // åˆ°è¾¹ç•ŒæŠ˜å›, ä½è¿ç®—å¿«
 					tileNo = gpu->vram[mapStart + 32 * mapY + mapX];
 					if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 256;
 				}
 			}
-		} //if (gpu->switchBg) // »æÖÆ±³¾°
+		} //if (gpu->switchBg) // ç»˜åˆ¶èƒŒæ™¯
 
 		if (gpu->switchObj) {
-			for (int i = 0; i < 40; i++) { // ±éÀú40¸öspirit²éÕÒÂäÔÚÉ¨ÃèÏßÉÏµÄ
+			for (int i = 0; i < 40; i++) { // éå†40ä¸ªspiritæŸ¥æ‰¾è½åœ¨æ‰«æçº¿ä¸Šçš„
 				struct GB_OAM* obj = &gpu->objData[i];
 				int objHeight = (gpu->objSize ? 16 : 8);
 				if (obj->y - 16 <= gpu->line && (obj->y - 16 + objHeight) > gpu->line) // Check if this sprite falls on this scanline
 				{
-					//int tileY = gpu->line - obj->y + 16; // tileY>=8Ê±¶ÁÈ¡µ½ÏàÁ¬µÄÏÂÒ»¸ötileÊı¾İ
-					GB_BYTE* tileRow = gpu->tileData[obj->tileNo][(obj->yflip ? objHeight - 1 - gpu->line + obj->y - 16 : gpu->line - obj->y + 16)]; // Ò»ĞĞ tile µÄÊı¾İ
+					//int tileY = gpu->line - obj->y + 16; // tileY>=8æ—¶è¯»å–åˆ°ç›¸è¿çš„ä¸‹ä¸€ä¸ªtileæ•°æ®
+					GB_BYTE* tileRow = gpu->tileData[obj->tileNo][(obj->yflip ? objHeight - 1 - gpu->line + obj->y - 16 : gpu->line - obj->y + 16)]; // ä¸€è¡Œ tile çš„æ•°æ®
 					int canvasOffset = gpu->line * surface->w + obj->x - 8; // Where to render on the canvas
 					GB_COLOR* objPal = gpu->objPals[obj->palNo]; // Palette to use for this sprite
 					for (int tileX = 0; tileX < 8; tileX++)
 					{
-						if ((obj->x - 8 + tileX) >= 0 && (obj->x - 8 + tileX) < 160) { // ÔÚ 160 x 144 ÆÁÄ»äÖÈ¾·¶Î§ÄÚ(Ë®Æ½·½Ïò), AND
-							int colorNo = tileRow[obj->xflip ? (7 - tileX) : tileX]; // Ë®Æ½·­×ª
+						if ((obj->x - 8 + tileX) >= 0 && (obj->x - 8 + tileX) < 160) { // åœ¨ 160 x 144 å±å¹•æ¸²æŸ“èŒƒå›´å†…(æ°´å¹³æ–¹å‘), AND
+							int colorNo = tileRow[obj->xflip ? (7 - tileX) : tileX]; // æ°´å¹³ç¿»è½¬
 							if ((colorNo != 0) && (obj->prio == 0 || canvas[canvasOffset + tileX] == palette[0])) {
-								// ÑÕÉ«²»Îª 0 (Í¸Ã÷É«), AND ¾«ÁéÍ¼ÔÚÉÏ²ã OR (¾«ÁéÍ¼ÔÚÏÂ²ã)±³¾°É«Í¸Ã÷ => »æÖÆ
+								// é¢œè‰²ä¸ä¸º 0 (é€æ˜è‰²), AND ç²¾çµå›¾åœ¨ä¸Šå±‚ OR (ç²¾çµå›¾åœ¨ä¸‹å±‚)èƒŒæ™¯è‰²é€æ˜ => ç»˜åˆ¶
 								canvas[canvasOffset + tileX] = objPal[colorNo];
 							}
 						}
 					}
 				}
 			}// for(40)
-		} //if (gpu->switchObj) // »æÖÆ¾«ÁéÍ¼
+		} //if (gpu->switchObj) // ç»˜åˆ¶ç²¾çµå›¾
 
 		if (gpu->switchWin && gpu->line >= gpu->winY) {
-			/* tile map: 32 x 32 x 1 ×Ö½Ú */
+			/* tile map: 32 x 32 x 1 å­—èŠ‚ */
 			int mapStart = (gpu->winMap ? 0x1C00 : 0x1800);// VRAM offset for the tile map
-			int mapY = ((gpu->line - gpu->winY) & 0xFF) >> 3; // Which line of tiles to use in the map, 8 ĞĞÏñËØ¶ÔÓ¦ 1 ĞĞtile
-			int mapX = (gpu->winX & 0xFF) >> 3; // Which tile to start with in the map line, 8 ÁĞÏñËØ¶ÔÓ¦ 1 ÁĞtile
+			int mapY = ((gpu->line - gpu->winY) & 0xFF) >> 3; // Which line of tiles to use in the map, 8 è¡Œåƒç´ å¯¹åº” 1 è¡Œtile
+			int mapX = (gpu->winX & 0xFF) >> 3; // Which tile to start with in the map line, 8 åˆ—åƒç´ å¯¹åº” 1 åˆ—tile
 			int tileNo = gpu->vram[mapStart + 32 * mapY + mapX];// Read tile index from the background map
-			if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 0x100;// tile set #0 ĞŞÕıË÷Òı
+			if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 0x100;// tile set #0 ä¿®æ­£ç´¢å¼•
 
-			/* tile ÄÚ²¿×ø±ê */
+			/* tile å†…éƒ¨åæ ‡ */
 			int tileY = (gpu->line - gpu->winY) & 0b111;// Which line of pixels to use in the tiles
 			int tileX = gpu->winX & 0b111;// Where in the tileline to start
 
 			int canvasOffset = gpu->line * 160; // Where to render on the canvas
 			for (int i = 0; i < 160; i++)
 			{
-				// »æÖÆÒ»¸öµã
-				// SDL: 8bit: pixelsÄÚ²¿´æ´¢surface->pixelFormat->paletteÄÚ²¿Ë÷Òı
-				//     >8bit: pixelsÄÚ²¿´æ´¢ÑÕÉ«RGB
+				// ç»˜åˆ¶ä¸€ä¸ªç‚¹
+				// SDL: 8bit: pixelså†…éƒ¨å­˜å‚¨surface->pixelFormat->paletteå†…éƒ¨ç´¢å¼•
+				//     >8bit: pixelså†…éƒ¨å­˜å‚¨é¢œè‰²RGB
 				int colorNo = gpu->tileData[tileNo][tileY][tileX];/*0-3*/
 				canvas[canvasOffset + i] = gpu->bgPal[colorNo]; // 0x17000
 				tileX++;
-				if (tileX == 8)// Ë®Æ½ÇĞ»»µ½ÏÂÒ»¸ötile
+				if (tileX == 8)// æ°´å¹³åˆ‡æ¢åˆ°ä¸‹ä¸€ä¸ªtile
 				{
 					tileX = 0;
-					mapX = (mapX + 1) & 31; // µ½±ß½çÕÛ»Ø, Î»ÔËËã¿ì
+					mapX = (mapX + 1) & 31; // åˆ°è¾¹ç•ŒæŠ˜å›, ä½è¿ç®—å¿«
 					tileNo = gpu->vram[mapStart + 32 * mapY + mapX];
 					if (gpu->tileSet == 0 && tileNo < 0x80) tileNo += 256;
 				}
 			}
-		} //if (gpu->switchWin) // »æÖÆ´°¿Ú
+		} //if (gpu->switchWin) // ç»˜åˆ¶çª—å£
 	}
 	return 0;
 }
 
 int video_updateTile(GB_VIDEO* gpu, GB_WORD addr, GB_BYTE val) {
-	addr &= 0x1FFE; // [Å¼Êı×Ö½Ú+ÆæÊı×Ö½Ú]=Ò»ĞĞÏñËØ
-	int tileNo = (addr & 0x1FF0) >> 4; // Ã¿¸ötileÕ¼16¸ö×Ö½Ú
-	int tileY = (addr & 0b1110) >> 1; // Ã¿ĞĞÏñËØÕ¼2¸ö×Ö½Ú
+	addr &= 0x1FFE; // [å¶æ•°å­—èŠ‚+å¥‡æ•°å­—èŠ‚]=ä¸€è¡Œåƒç´ 
+	int tileNo = (addr & 0x1FF0) >> 4; // æ¯ä¸ªtileå 16ä¸ªå­—èŠ‚
+	int tileY = (addr & 0b1110) >> 1; // æ¯è¡Œåƒç´ å 2ä¸ªå­—èŠ‚
 	int bitMask = 0b10000000;
 	for (int tileX = 0; tileX < 8; tileX++)
 	{
@@ -210,14 +210,14 @@ void vblankDelay() {
 	static Uint32 lastFrameTicks = 0;
 	static Uint32 last3FrameTicks = 0;
 	static short frameCounter = 0;
-	if (frameCounter == 2) { // Ã¿ÈıÖ¡°´50msÍ¬²½Ò»´Î
+	if (frameCounter == 2) { // æ¯ä¸‰å¸§æŒ‰50msåŒæ­¥ä¸€æ¬¡
 		frameCounter = 0;
 		while (SDL_GetTicks() - last3FrameTicks < 50) {
 			SDL_Delay(1);
 		}
 		last3FrameTicks = SDL_GetTicks();
 	}
-	else { // ·ñÔò°´16msÍ¬²½
+	else { // å¦åˆ™æŒ‰16msåŒæ­¥
 		frameCounter++;
 		while (SDL_GetTicks() - lastFrameTicks < 16) {
 			SDL_Delay(1);
@@ -250,22 +250,22 @@ int video_step(GB_VIDEO* gpu, int cycles) {
 			gpu->modeClock -= 43;
 			video_renderLine(gpu); // Write a scanline to the framebuffer
 			gpu->mode = 0;
-			if (gpu->lcdIntEn & 0x08) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ÖĞ¶Ï Mode 0
+			if (gpu->lcdIntEn & 0x08) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ä¸­æ–­ Mode 0
 		}
 		break;
-	case 0: // Ë®Æ½¸´Î» HBLANK (line = 0-144)
-		if (gpu->modeClock >= 51) // Ã¿51¸ö»úÆ÷ÖÜÆÚ Ë®Æ½¸´Î»Ò»´Î
+	case 0: // æ°´å¹³å¤ä½ HBLANK (line = 0-144)
+		if (gpu->modeClock >= 51) // æ¯51ä¸ªæœºå™¨å‘¨æœŸ æ°´å¹³å¤ä½ä¸€æ¬¡
 		{
 			gpu->modeClock -= 51;
-			gpu->line++;  // ÏÂÒÆÒ»ĞĞ
+			gpu->line++;  // ä¸‹ç§»ä¸€è¡Œ
 			if (gpu->line == 144) { // Enter hblank
 				gpu->mode = 1;
-				if (gpu->lcdIntEn & 0x10) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ÖĞ¶Ï Mode 1
+				if (gpu->lcdIntEn & 0x10) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ä¸­æ–­ Mode 1
 				if (gpu->switchAll) {
-					gpu->parent->mem->intFlag |= 0b00000001; // VBLANK ÖĞ¶Ï
+					gpu->parent->mem->intFlag |= 0b00000001; // VBLANK ä¸­æ–­
 					SDL_Surface* surface = SDL_GetWindowSurface(gpu->window);
 					SDL_BlitScaled(gpu->surface, &srcRect, surface, &surface->clip_rect);
-					SDL_UpdateWindowSurface(gpu->window); // Ë¢ĞÂÒ»Ö¡
+					SDL_UpdateWindowSurface(gpu->window); // åˆ·æ–°ä¸€å¸§
 					//printf("Fresh at %d\n", SDL_GetTicks());
 					vblankDelay();
 					//printf("After delay at %d\n", SDL_GetTicks());
@@ -273,11 +273,11 @@ int video_step(GB_VIDEO* gpu, int cycles) {
 			}
 			else {
 				gpu->mode = 2;
-				if (gpu->lcdIntEn & 0x20) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ÖĞ¶Ï Mode 2
+				if (gpu->lcdIntEn & 0x20) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ä¸­æ–­ Mode 2
 			}
 		}
 		break;
-	case 1: // ´¹Ö±¸´Î» VBLANK (456 x 10 lines, line = 144-154)
+	case 1: // å‚ç›´å¤ä½ VBLANK (456 x 10 lines, line = 144-154)
 		if (gpu->modeClock >= 114)
 		{
 			gpu->modeClock -= 114;
@@ -286,13 +286,13 @@ int video_step(GB_VIDEO* gpu, int cycles) {
 			{
 				gpu->line = 0;
 				gpu->mode = 2;
-				if (gpu->lcdIntEn & 0x20) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ÖĞ¶Ï Mode 2
+				if (gpu->lcdIntEn & 0x20) gpu->parent->mem->intFlag |= 0b00000010; // LCDC ä¸­æ–­ Mode 2
 			}
 		}
 		break;
 	}
 	if (gpu->switchAll && (gpu->lcdIntEn & 0x40) && gpu->line == gpu->lyc) {
-		gpu->parent->mem->intFlag |= 0b00000010; // LCDC ÖĞ¶Ï LYC=LY
+		gpu->parent->mem->intFlag |= 0b00000010; // LCDC ä¸­æ–­ LYC=LY
 	}
 	return 0;
 }

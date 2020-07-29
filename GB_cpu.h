@@ -22,7 +22,7 @@ typedef struct GB_CPU
 	};
 	GB_WORD SP, PC;
 	int insnCycles;
-	int intMstEn; // Èí¼þ¿ØÖÆ ÖÐ¶Ï×Ü¿ª¹Ø
+	int intMstEn; // è½¯ä»¶æŽ§åˆ¶ ä¸­æ–­æ€»å¼€å…³
 	int isHalt;
 }GB_CPU;
 

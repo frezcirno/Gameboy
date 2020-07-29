@@ -53,16 +53,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GB_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GB_cpu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GB_gameboy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GB_memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GB_sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GB_insn.h">
@@ -71,13 +68,19 @@
     <ClInclude Include="GB_joypad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GB_common.h">
+    <ClInclude Include="GB_mbc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GB_memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GB_sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GB_video.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GB_mbc.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include "GB_memory.h"
 
-static GB_BYTE switchEram = 1;  // 0x0000-0x2000 ÍØÕ¹ram¿ª¹Ø(W)
+static GB_BYTE switchEram = 1;  // 0x0000-0x2000 æ‹“å±•ramå¼€å…³(W)
 static GB_WORD romBank = 1;   // 0x2000-0x4000 Switch between 1-31 (value 0 is seen as 1)
 static GB_BYTE ramBank = 0;  // 0x4000-0x6000 Switch between 0-F, if any
 
