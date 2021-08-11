@@ -1,6 +1,6 @@
 # TinyGameBoy
 
-A very naive GameBoy Emulator written in C, developed by Visual Studio on Windows 10. 
+A very naive GameBoy emulator written in C, developed with Visual Studio on Windows 10. 
 
 ## Features
 
@@ -24,13 +24,13 @@ A very naive GameBoy Emulator written in C, developed by Visual Studio on Window
 
 ## Building (Windows)
 
-Just open the Visual Studio solution file `GameBoy.sln`, and use Visual Studio to build and run it. 
+Just open the Visual Studio solution file `GameBoy.sln`, and build and run it in Visual Studio 
 
 The libSDL environment is already configured.
 
 ## Building (Linux)
 
-**I only tested it on ubuntu.**
+**only tested on ubuntu**
 
 First, install the `libsdl2-dev` package.
 
